@@ -1,0 +1,27 @@
+<div>
+    <h1>Cart</h1>
+    {{#if data}}
+        <p>Id del carrito: {{data._id}}</p>
+        <a href="http://localhost:8000/products"><button>ver productos</button></a>
+        {{#each data.products }}
+
+            <div>
+                <div>
+                    <h3>{{this._id.title}}</h3>
+                    <p>Description: {{this._id.description}}</p>
+                    <p>Category: {{this._id.category}}</p>
+                    <p>Quantity: {{this.quantity}}</p>
+                    <p>Precio: {{this._id.price}}</p>
+                </div>
+                <button class="eliminarProduct" id="{{this._id._id}}">Eliminar</button>
+
+            </div>
+
+        
+        {{/each}}  
+    {{else}}
+        <h1>{{message}}</h1>
+    {{/if}}
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realTimeCart.js"></script>
