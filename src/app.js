@@ -19,6 +19,7 @@ import sessionsRouter from "./routes/sessions.router.js"
 import initializePassport from "./config/passport.config.js";
 
 import __dirname from './utils.js';
+import attachLogger from "./middlewares/logger.js";
 
 const app = express();
 const PORT = config.app.PORT
@@ -28,6 +29,7 @@ const connection =  mongoose.connect(config.mongo.URL);
 
 const productManager = new ProductManager();
 
+app.use(attachLogger);
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -54,12 +56,23 @@ app.use('/',viewsRouterMongo);
 app.use('/api/products',productsRouterMongo);
 app.use('/api/carts',cartRouterMongo);
 app.use('/api/sessions',sessionsRouter);
+app.use('/loggerTest',(req,res)=>{
+    try {
+        req.logger.debug('debug')
+        req.logger.info('info')
+        req.logger.http('http')
+        req.logger.warning('warning')
+        req.logger.error('error')
+        req.logger.fatal('fatal')
+        res.sendStatus(200);
+    } catch (error) {
+        res.status(500).send({error:"error en el loggerTest"})
+    }
+})
 
 io.on('connection',async socket=>{
     const arrayProducts =  await productManager.getProducts();
     io.emit('products',arrayProducts);
-    console.log("Nuevo cliente conectado");
     socket.on("product",data=>{
-        console.log(data,"aca esta la data");
     })
 })

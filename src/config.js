@@ -12,5 +12,8 @@ export default {
     admin:{
         EMAIL:process.env.ADMIN_EMAIL,
         PASSWORD:process.env.ADMIN_PASSWORD
+    },
+    logger:{
+        CASE:process.env.CASE_LOGGER
     }
 }
